@@ -1,0 +1,46 @@
+実行クエリ
+insert into item(name,price) values('牛乳', 198);
+insert into item(name,price) values('食パン', 158);
+insert into item(name,price) values('卵', 228);
+insert into item(name,price) values('米', 1980);
+
+
+実行結果
+sql_education=# insert into item(name,price) values('牛乳', 198);
+INSERT 0 1
+sql_education=# select*from item;
+ item_id | name | price
+---------+------+-------
+       1 | 牛乳 |   198
+(1 行)
+
+sql_education=# insert into item(name,price) values('食パン', 158);
+INSERT 0 1
+sql_education=# select*from item;
+ item_id |  name  | price
+---------+--------+-------
+       1 | 牛乳   |   198
+       2 | 食パン |   158
+(2 行)
+
+sql_education=# insert into item(name,price) values('卵', 228);
+INSERT 0 1
+sql_education=# select*from item;
+ item_id |  name  | price
+---------+--------+-------
+       1 | 牛乳   |   198
+       2 | 食パン |   158
+       3 | 卵     |   228
+(3 行)
+
+sql_education=# insert into item(name,price) values('米', 1980);
+INSERT 0 1
+sql_education=# select*from item;
+ item_id |  name  | price
+---------+--------+-------
+       1 | 牛乳   |   198
+       2 | 食パン |   158
+       3 | 卵     |   228
+       4 | 米     |  1980
+(4 行)
+

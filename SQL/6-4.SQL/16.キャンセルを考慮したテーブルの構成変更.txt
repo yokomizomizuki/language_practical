@@ -1,0 +1,76 @@
+今回の要件はキャンセルを考慮したテーブルの構成変更をするというものです。
+この要件を満たすため、今回は以下のようなテーブルを作成し、既存の注文テーブルと注文製品テーブルに紐づけて使用できるようにします。
+こうすることでどの注文をキャンセルしたのかを確認する際にキャンセルした内容を参照することができるようにします。
+
+ テーブル名：
+　　キャンセル履歴テーブル(cancel_history)
+
+ テーブル構成：
+    キャンセルID 　     cancel_id　　　　キャンセル番号のIDを入力します。
+    注文ID              order_info_id　　キャンセルとなる注文のIDを入力します。
+    注文製品ID          order_item_id　　キャンセルとなる注文製品のIDを入力します。
+    製品ID              item_id　　　　　キャンセルとなる製品のIDを入力します。
+    キャンセルした日時  cancel_date　　　キャンセルした注文や注文製品の日時を入力します。
+　　
+
+ キャンセルした注文の取得方法について：
+　　現在時刻をもとにキャンセル履歴テーブルを検索し、検索結果を注文テーブルと注文製品テーブルに結合します。
+
+また、注文テーブルと注文製品テーブルにそれぞれキャンセルカラム(info_canceled, item_canceled)とキャンセル日時(canceled_at)を追加します。
+
+
+SQLの解説：
+ alter table テーブル名 add column カラム名 型; でカラムの追加をした。
+ create table文でキャンセル履歴テーブルの作成をした。
+
+
+実際のSQL文
+1.注文テーブルにキャンセルカラムとキャンセル日時を追加　　
+alter table order_info add column is_canceled boolean default false, add column canceled_at date;
+
+2.注文製品テーブルにキャンセルカラムとキャンセル日時を追加
+alter table order_item add column cancel_status boolean default false, add column canceled_at date;
+
+3.キャンセル履歴テーブルの作成
+create table cancel_history (cancel_id serial primary key, order_info_id int not null, id int not null,item_id int not null, cancel_date date not null, foreign key (order_info_id) references order_info(order_info_id) on delete cascade, foreign key (id) references order_item(id) on delete cascade);
+
+実行結果
+1.sql_education=# select * from order_info;
+
+ order_info_id | order_date | account_id | is_canceled | canceled_at
+---------------+------------+------------+-------------+-------------
+             1 | 2024-12-30 |          1 | f           |
+             2 | 2025-01-20 |          1 | f           |
+             3 | 2024-12-31 |          2 | f           |
+             4 | 2025-01-20 |          2 | f           |
+             5 | 2025-04-01 |          2 | f           |
+(5 行)
+
+
+2.sql_education=# select * from order_item;
+
+ id | order_id | item_id | quantity | cancel_status | canceled_at
+----+----------+---------+----------+---------------+-------------
+  1 |        1 |       2 |        2 | f             |
+  2 |        1 |       4 |        1 | f             |
+  3 |        1 |       7 |        2 | f             |
+  4 |        2 |       5 |        4 | f             |
+  5 |        2 |       6 |        5 | f             |
+  6 |        2 |       7 |        6 | f             |
+  7 |        3 |       3 |       10 | f             |
+  8 |        3 |       7 |        5 | f             |
+  9 |        3 |       2 |        5 | f             |
+ 10 |        4 |       3 |       10 | f             |
+ 11 |        4 |       7 |        1 | f             |
+ 12 |        4 |       6 |        2 | f             |
+ 13 |        5 |       8 |        5 | f             |
+ 14 |        5 |       4 |        2 | f             |
+ 15 |        5 |       1 |        2 | f             |
+(15 行)
+
+3.sql_education=*# create table cancel_history (cancel_id serial primary key, order_info_id int not null, id int not null,item_id int not null, cancel_date date not null, foreign key (order_info_id) references order_info(order_info_id) on delete cascade, foreign key (id) references order_item(id) on delete cascade);
+
+sql_education=*# select * from cancel_history;
+ cancel_id | order_info_id | id | item_id | cancel_date
+-----------+---------------+----+---------+-------------
+(0 行)

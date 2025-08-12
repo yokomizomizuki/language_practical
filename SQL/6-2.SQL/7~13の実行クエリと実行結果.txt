@@ -1,0 +1,84 @@
+7.条件付き
+(item, 200円未満の製品の一覧, 値段が高い順(金額降順)に並べる, 製品ID, 製品名, 値段)
+
+sql_education=# select item_id as 製品ID, name as 製品名, price as 値段 from item where price > 200 order by 値段 desc;
+
+ 製品id | 製品名 | 値段
+--------+--------+------
+      4 | 米     | 1980
+      3 | 卵     |  228
+(2 行)
+
+8.集計関数付き
+(order_info, 2024年にされた注文総数, 2024年の注文数)
+
+sql_education=# select COUNT(*) from order_info where order_date < '2025-01-01';
+
+ count
+-------
+     2
+(1 行)
+
+9.副問い合わせを利用した取得
+(order_info, account, ac1がした注文すべての日付, ac1の注文日付)
+
+sql_education=# select order_date from order_info where account_id = (select account_id from account where name = 'ac1');
+
+ order_date
+------------
+ 2024-12-30
+ 2025-01-20
+(2 行)
+
+10.結合を利用した取得
+(order_item, order_info, item, キャベツまたはニンジンが含まれる注文のid, 注文ID)
+
+sql_education=# select order_info.order_info_id as 注文ID from order_info left join order_item on order_item.order_id = order_info.order_info_id left join item on item.item_id = order_item.item_id where item.name = 'キャベツ' or item.name = 'にんじん';
+
+ 注文id
+--------
+      2
+      5
+(2 行)
+
+11.複合した条件での取得
+(order_item, item, 全注文中、各製品がいくつ注文されたか, 製品の注文合計数を降順, 製品名,注文合計数)
+
+sql_education=# select item.name as 製品名, SUM(order_item.quantity) as 注文合計数 from item left join order_item on order_item.item_id = item.item_id group by item.name order by 注文合計数 desc;
+
+     製品名     | 注文合計数
+----------------+------------
+ 卵             |         20
+ カップラーメン |         14
+ 食パン         |          7
+ バナナ         |          7
+ キャベツ       |          5
+ にんじん       |          4
+ 米             |          3
+ 牛乳           |          2
+(8 行)
+
+12.集計結果からの取得①
+(order_info, order_item, item, 各注文ごとの合計額, 合計金額の降順, 注文ID, 合計金額)
+
+sql_education=# select order_info.order_info_id as 注文ID, SUM(order_item.quantity * item.price) as 合計金額 from order_info left join order_item on order_item.order_id = order_info.order_info_id left join item on item.item_id = order_item.item_id group by 注文ID order by 合計金額 desc;
+
+ 注文id | 合計金額
+--------+----------
+      5 |     5356
+      3 |     3860
+      4 |     2834
+      1 |     2612
+      2 |     2170
+(5 行)
+
+13.集計結果からの取得②
+(account, order_item, item, ユーザーごとの注文の合計金額, ユーザーIDの昇順, ユーザーID, ユーザー名, 合計金額)
+
+sql_education=# select account.account_id as ユーザーID, account.name as ユーザー名, SUM(order_item.quantity * item.price) as 合計金額 from account left join order_info on order_info.account_id = account.account_id left join order_item on order_item.order_id = order_info.order_info_id left join item on item.item_id = order_item.item_id group by ユーザーID order by ユーザーID asc;
+
+ ユーザーid | ユーザー名 | 合計金額
+------------+------------+----------
+          1 | ac1        |     4782
+          2 | ac2        |    12050
+(2 行)

@@ -1,0 +1,54 @@
+今回の要件は店舗の概念を追加するというものです。
+この要件を満たすため、今回は以下のような構成のテーブルを作成し、既存の注文テーブルと紐づけて使用できるようにします。
+
+
+  テーブル名：
+　　　店舗テーブル(stores)
+
+  テーブル構成：
+      店舗ID   store_id    店舗のIDを入力します。
+      店舗名   store_name　店舗名を入力します。
+      住所     address　　 店舗の住所を入力します。
+
+　注文先の取得方法について：
+    店舗名をもとに店舗テーブルを検索し、検索結果をユーザーテーブルと注文テーブルを結合します。
+
+SQLの解説：
+create文で店舗テーブルの作成をした。
+insert文で店舗テーブルにデータを登録した。(注文テーブルに外部キーを追加するため)
+alter table文で注文テーブルに店舗テーブルの外部キーを追加した。
+
+
+実際のSQL文
+1.create文で店舗テーブル作成
+create table stores (store_id serial primary key, store_name char varying(50) not null, address char varying(50) not null);
+
+2.insert文で店舗テーブルにデータ登録
+insert into stores (store_id, store_name, address) values (1, 'てすと', '東京都' ), (2, 'てすぽ', '東京都' ), (3, 'てすと', '東京都'), (4, 'てすと', '東京都'),(5, 'てすぽ', '東京都');
+
+3.alter table文で注文テーブルに店舗テーブルの外部キー追加
+alter table order_info add constraint order_info foreign key (order_info_id) references stores(store_id);
+
+実行結果
+1.
+sql_education=*# create table stores (store_id serial primary key, store_name int not null, address int not null, foreign key (store_id) references account(account_id) on delete cascade, foreign key (store_name) references order_item(id) on delete cascade);
+
+sql_education=*# select * from stores;
+ store_id | store_name | address
+----------+------------+---------
+(0 行)
+
+2.
+sql_education=# insert into stores (store_id, store_name, address) values (1, 'てすと', '東京都' ),  (2, 'てすぽ', '東京都' ), (3, 'てすと', '東京都'), (4, 'てすと', '東京都'),(5, 'てすぽ', '東京都');
+
+sql_education=# select * from stores ;
+ store_id | store_name |                        address
+----------+------------+-------------------------------------------------------
+        1 | てすと     | 東京都
+        2 | てすぽ     | 東京都
+        3 | てすと     | 東京都
+        4 | てすと     | 東京都
+        5 | てすぽ     | 東京都
+(5 行)
+
+
