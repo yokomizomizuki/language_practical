@@ -23,7 +23,7 @@ function submitButton(){
       calcResult = textForm1 / textForm2
       break;
     default:
-      calcResult = "calc type was not selected.";
+      alert("calc type was not selected.");
       return false;
   }
   $("#result").text('結果は'+ calcResult +'です。');
