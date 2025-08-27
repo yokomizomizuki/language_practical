@@ -1,0 +1,24 @@
+実行クエリ
+1.account
+create table account(account_id serial primary key,name character varying(50) not null);
+
+2.item
+create table item(item_id serial primary key,name character varying(50) not null,price integer not null);
+
+3.order_info
+create table order_info(order_info_id serial primary key,order_date date not null,account_id int not null,foreign key(account_id) references account(account_id) on delete cascade);
+
+4.order_item
+create table order_item(id serial primary key, order_id int not null, item_id int not null, quantity int not null, foreign key (order_id) references order_info(order_info_id) on delete cascade, foreign key (item_id) references item(item_id) on delete restrict);
+
+
+実行結果
+sql_education=# \dt
+              リレーション一覧
+ スキーマ |    名前    |  タイプ  |  所有者
+----------+------------+----------+----------
+ public   | account    | テーブル | postgres
+ public   | item       | テーブル | postgres
+ public   | order_info | テーブル | postgres
+ public   | order_item | テーブル | postgres
+(4 行)

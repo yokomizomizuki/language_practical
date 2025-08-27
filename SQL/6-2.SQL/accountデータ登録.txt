@@ -1,0 +1,13 @@
+実行クエリ
+insert into account(name) values('ac1'),('ac2');
+
+実行結果
+sql_education=# insert into account(name) values('ac1'),('ac2');
+INSERT 0 2
+
+sql_education=# select * from account;
+ account_id | name
+------------+------
+          1 | ac1
+          2 | ac2
+(2 行)

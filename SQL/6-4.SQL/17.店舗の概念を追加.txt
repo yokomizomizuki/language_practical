@@ -1,0 +1,88 @@
+今回の要件は店舗の概念を追加するというものです。
+この要件を満たすため、今回は以下のような構成のテーブルを作成し、既存の注文テーブルと紐づけて使用できるようにします。
+
+
+  テーブル名：
+　　　店舗テーブル(stores)
+
+  テーブル構成：
+      店舗ID   store_id    店舗のIDを入力します。
+      店舗名   store_name　店舗名を入力します。
+      住所     address　　 店舗の住所を入力します。
+
+　注文先の取得方法について：
+    店舗名をもとに店舗テーブルを検索し、検索結果をユーザーテーブルと注文テーブルを結合します。
+
+  また、注文テーブルに店舗IDカラムを追加します。
+
+SQLの解説：
+create文で店舗テーブルの作成をした。
+insert文で店舗テーブルにデータを登録した。(注文テーブルに外部キーを追加するため)
+alter table文で注文テーブルに店舗テーブルの外部キーを追加した。
+
+
+実際のSQL文
+1.create文で店舗テーブル作成
+create table stores (store_id serial primary key, store_name char varying(50) not null, address char varying(50) not null);
+
+2.insert文で店舗テーブルにデータ登録
+insert into stores (store_id, store_name, address) values (1, 'てすと', '東京都' ), (2, 'てすぽ', '東京都' ), (3, 'てすと', '東京都'), (4, 'てすと', '東京都'),(5, 'てすぽ', '東京都');
+
+3.alter table文で注文テーブルに店舗IDカラム追加
+alter table order_info add column store_id int;
+
+4.alter table文で注文テーブルに店舗テーブルの外部キー追加
+alter table order_info add constraint order_info foreign key (store_id) references stores(store_id);
+
+実行結果
+1.
+sql_education=*# create table stores (store_id serial primary key, store_name int not null, address int not null, foreign key (store_id) references account(account_id) on delete cascade, foreign key (store_name) references order_item(id) on delete cascade);
+
+sql_education=*# select * from stores;
+ store_id | store_name | address
+----------+------------+---------
+(0 行)
+
+2.
+sql_education=# insert into stores (store_id, store_name, address) values (1, 'てすと', '東京都' ),  (2, 'てすぽ', '東京都' ), (3, 'てすと', '東京都'), (4, 'てすと', '東京都'),(5, 'てすぽ', '東京都');
+
+sql_education=# select * from stores ;
+ store_id | store_name |                        address
+----------+------------+-------------------------------------------------------
+        1 | てすと     | 東京都
+        2 | てすぽ     | 東京都
+        3 | てすと     | 東京都
+        4 | てすと     | 東京都
+        5 | てすぽ     | 東京都
+(5 行)
+
+3.
+sql_education=*# select * from order_info;
+ order_info_id | order_date | account_id | is_canceled | canceled_at | store_id 
+---------------+------------+------------+-------------+-------------+----------
+             2 | 2025-01-20 |          1 | f           |             |          
+             3 | 2024-12-31 |          2 | f           |             |          
+             4 | 2025-01-20 |          2 | f           |             |          
+             5 | 2025-04-01 |          2 | f           |             |          
+             1 | 2024-12-30 |          1 | t           | 2025-08-26  |          
+(5 行)
+
+4.設定されたことの確認
+sql_education=# \d order_info;
+
+                                      テーブル"public.order_info"
+      列       | タイプ  | 照合順序 | Null 値を許容 |                    デフォルト
+---------------+---------+----------+---------------+---------------------------------------------------
+ order_info_id | integer |          | not null      | nextval('order_info_order_info_id_seq'::regclass)
+ order_date    | date    |          | not null      |
+ account_id    | integer |          | not null      |
+ is_canceled   | boolean |          |               | false
+ canceled_at   | date    |          |               |
+ store_id      | integer |          |               |
+インデックス:
+    "order_info_pkey" PRIMARY KEY, btree (order_info_id)
+外部キー制約:
+    "order_info" FOREIGN KEY (store_id) REFERENCES stores(store_id)
+    "order_info_account_id_fkey" FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE
+参照元:
+    TABLE "order_item" CONSTRAINT "order_item_order_id_fkey" FOREIGN KEY (order_id) REFERENCES order_info(order_info_id) ON DELETE CASCADE

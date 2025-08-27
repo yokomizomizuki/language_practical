@@ -1,0 +1,49 @@
+<実行クエリと実行結果>
+
+・アカウントid情報
+sql_education=# select * from account;
+ account_id | name　　　　　　　　　　　　　　
+------------+------　　　　　　　　　　　　　　
+          1 | ac1　　　　　　　　　　　　　　　
+          2 | ac2　　　　　　　　　　　　　　　
+(2 行)　　
+
+
+・製品id情報
+sql_education=# select * from item;
+ item_id |      name      | price
+---------+----------------+-------
+       1 | 牛乳           |   198
+       2 | 食パン         |   158
+       3 | 卵             |   228
+       4 | 米             |  1980
+       5 | にんじん       |    58
+       6 | バナナ         |   198
+       7 | カップラーメン |   158
+       8 | キャベツ       |   200
+(8 行)　　　　　　　　　　　　　　　　　　　
+
+
+・登録結果
+select order_info.account_id, order_info.order_date, order_item.item_id, order_item.quantity from order_info inner join order_item on order_info_id = order_id;
+
+sql_education=# select order_info.account_id, order_info.order_date, order_item.item_id, order_item.quantity from order_info inner join order_item on order_info_id = order_id;
+ account_id | order_date | item_id | quantity
+------------+------------+---------+----------
+          1 | 2024-12-30 |       2 |        2
+          1 | 2024-12-30 |       4 |        1
+          1 | 2024-12-30 |       7 |        2
+          1 | 2025-01-20 |       5 |        4
+          1 | 2025-01-20 |       6 |        5
+          1 | 2025-01-20 |       7 |        6
+          2 | 2024-12-31 |       3 |       10
+          2 | 2024-12-31 |       7 |        5
+          2 | 2024-12-31 |       2 |        5
+          2 | 2025-01-20 |       3 |       10
+          2 | 2025-01-20 |       7 |        1
+          2 | 2025-01-20 |       6 |        2
+          2 | 2025-04-01 |       8 |        5
+          2 | 2025-04-01 |       4 |        2
+          2 | 2025-04-01 |       1 |        2
+(15 行)
+

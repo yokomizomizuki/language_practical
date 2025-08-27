@@ -1,0 +1,115 @@
+今回の要件はキャンセルを考慮したテーブルの構成変更をするというものです。
+この要件を満たすため、今回は以下のような既存の注文テーブルと注文製品テーブルにキャンセルの使用ができるようにします。
+こうすることでどの注文をキャンセルしたのかを確認する際にキャンセルした内容を参照することができるようにします。
+
+ 注文テーブルと注文製品テーブルにそれぞれキャンセルカラム(is_canceled)とキャンセル日時(canceled_at)を追加します。
+
+ キャンセルした注文の取得方法について：
+　　各テーブルのキャンセルフラグがtrueのものを取得してキャンセルした注文を確認します。
+
+
+
+SQLの解説：
+ alter table テーブル名 add column カラム名 型; でカラムの追加をした。
+ update文を用いて、それぞれのキャンセルフラグをtrueに更新した。
+ 各テーブルのキャンセルフラグがtrueのものを取得した。
+
+実際のSQL文
+1.注文テーブルにキャンセルカラムとキャンセル日時を追加　　
+alter table order_info add column is_canceled boolean default false, add column canceled_at date;
+
+2.注文製品テーブルにキャンセルカラムとキャンセル日時を追加
+alter table order_item add column is_canceled boolean default false, add column canceled_at date;
+
+3.注文テーブルの一部のキャンセルフラグをtrueに更新
+update order_info set is_canceled = true where order_info_id = 1;
+
+4.注文製品テーブルの一部のキャンセルフラグをtrueに更新
+update order_item set is_canceled = true where order_id = 2 and item_id IN (5, 6);
+
+5.各テーブルのキャンセルフラグがtrueのものを取得
+
+
+実行結果
+1.sql_education=# select * from order_info;
+
+ order_info_id | order_date | account_id | is_canceled | canceled_at
+---------------+------------+------------+-------------+-------------
+             1 | 2024-12-30 |          1 | f           |
+             2 | 2025-01-20 |          1 | f           |
+             3 | 2024-12-31 |          2 | f           |
+             4 | 2025-01-20 |          2 | f           |
+             5 | 2025-04-01 |          2 | f           |
+(5 行)
+
+
+2.sql_education=# select * from order_item;
+
+ id | order_id | item_id | quantity | is_canceled | canceled_at
+----+----------+---------+----------+-------------+-------------
+  1 |        1 |       2 |        2 | f           |
+  2 |        1 |       4 |        1 | f           |
+  3 |        1 |       7 |        2 | f           |
+  4 |        2 |       5 |        4 | f           |
+  5 |        2 |       6 |        5 | f           |
+  6 |        2 |       7 |        6 | f           |
+  7 |        3 |       3 |       10 | f           |
+  8 |        3 |       7 |        5 | f           |
+  9 |        3 |       2 |        5 | f           |
+ 10 |        4 |       3 |       10 | f           |
+ 11 |        4 |       7 |        1 | f           |
+ 12 |        4 |       6 |        2 | f           |
+ 13 |        5 |       8 |        5 | f           |
+ 14 |        5 |       4 |        2 | f           |
+ 15 |        5 |       1 |        2 | f           |
+(15 行)
+
+3.sql_education=*# update order_info set is_canceled = true,  canceled_at = '2025-08-26' where order_info_id = 1;
+
+ order_info_id | order_date | account_id | is_canceled | canceled_at 
+---------------+------------+------------+-------------+-------------
+             2 | 2025-01-20 |          1 | f           |             
+             3 | 2024-12-31 |          2 | f           |             
+             4 | 2025-01-20 |          2 | f           |             
+             5 | 2025-04-01 |          2 | f           |             
+             1 | 2024-12-30 |          1 | t           | 2025-08-26  
+(5 行)
+
+4.sql_education=*# update order_item set is_canceled = true,  canceled_at = '2025-08-26' where order_id = 2 and item_id IN (5, 6);
+
+ id | order_id | item_id | quantity | is_canceled | canceled_at
+----+----------+---------+----------+-------------+-------------
+  1 |        1 |       2 |        2 | f           |
+  2 |        1 |       4 |        1 | f           |
+  3 |        1 |       7 |        2 | f           |
+  6 |        2 |       7 |        6 | f           |
+  7 |        3 |       3 |       10 | f           |
+  8 |        3 |       7 |        5 | f           |
+  9 |        3 |       2 |        5 | f           |
+ 10 |        4 |       3 |       10 | f           |
+ 11 |        4 |       7 |        1 | f           |
+ 12 |        4 |       6 |        2 | f           |
+ 13 |        5 |       8 |        5 | f           |
+ 14 |        5 |       4 |        2 | f           |
+ 15 |        5 |       1 |        2 | f           |
+  4 |        2 |       5 |        4 | t           | 2025-08-26
+  5 |        2 |       6 |        5 | t           | 2025-08-26
+(15 行)
+
+5.
+ 注文全体
+sql_education=# select * from order_info where is_canceled = true;
+
+ order_info_id | order_date | account_id | is_canceled | canceled_at 
+---------------+------------+------------+-------------+-------------
+             1 | 2024-12-30 |          1 | t           | 2025-08-26          
+(1 行)
+
+ 製品単位
+sql_education=# select * from order_item where is_canceled = true;
+
+ id | order_id | item_id | quantity | is_canceled | canceled_at
+----+----------+---------+----------+-------------+-------------
+  4 |        2 |       5 |        4 | t           | 2025-08-26
+  5 |        2 |       6 |        5 | t           | 2025-08-26
+(2 行)

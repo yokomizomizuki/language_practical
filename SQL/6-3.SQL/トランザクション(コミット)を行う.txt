@@ -1,0 +1,60 @@
+実行クエリ
+1.begin;
+2.insert into account(name) values('ac3'),('ac4');
+3.select * from account;
+4.select * from account;(非トランザクション)
+5.commit;
+6-1.select * from account;
+6-2.select * from account;(非トランザクション)
+
+
+実行結果
+1.
+sql_education=# begin;
+BEGIN
+
+2.
+sql_education=*# insert into account(name) values('ac3'),('ac4');
+INSERT 0 2
+
+3.
+sql_education=*# select * from account;
+ account_id | name
+------------+------
+          1 | ac1
+          2 | ac2
+          5 | ac3
+          6 | ac4
+(4 行)
+
+4.(非トランザクション)
+sql_education=# select * from account;
+ account_id | name
+------------+------
+          1 | ac1
+          2 | ac2
+(2 行)
+
+5.
+sql_education=*# commit;
+COMMIT
+
+6-1.
+sql_education=# select * from account;
+ account_id | name
+------------+------
+          1 | ac1
+          2 | ac2
+          5 | ac3
+          6 | ac4
+(4 行)
+
+6-2.(非トランザクション)
+sql_education=# select * from account;
+ account_id | name
+------------+------
+          1 | ac1
+          2 | ac2
+          5 | ac3
+          6 | ac4
+(4 行)

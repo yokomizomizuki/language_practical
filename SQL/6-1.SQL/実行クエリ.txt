@@ -1,0 +1,16 @@
+1.学習用のデータベース作成
+create database sql_education;
+
+確認コマンド：\l
+
+2.学習用のスキーマ作成
+create schema sql_education;
+
+確認コマンド：\dn
+
+3.スキーマの切り替え
+(1)set search_path to sql_education;
+(2)set search_path to public;
+
+確認コマンド：select current_schema();
+

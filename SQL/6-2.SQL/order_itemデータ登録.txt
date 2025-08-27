@@ -1,0 +1,258 @@
+1.実行クエリ
+insert into order_item(order_id, item_id, quantity) values(1, 2, 2);
+insert into order_item(order_id, item_id, quantity) values(1, 4, 1);
+insert into order_item(order_id, item_id, quantity) values(1, 7, 2);
+insert into order_item(order_id, item_id, quantity) values(2, 5, 4);
+insert into order_item(order_id, item_id, quantity) values(2, 6, 5);
+insert into order_item(order_id, item_id, quantity) values(2, 7, 6);
+insert into order_item(order_id, item_id, quantity) values(3, 3, 10);
+insert into order_item(order_id, item_id, quantity) values(3, 7, 5);
+insert into order_item(order_id, item_id, quantity) values(3, 2, 5);
+insert into order_item(order_id, item_id, quantity) values(4, 3, 10);
+insert into order_item(order_id, item_id, quantity) values(4, 7, 1);
+insert into order_item(order_id, item_id, quantity) values(4, 6, 2);
+insert into order_item(order_id, item_id, quantity) values(5, 8, 5);
+insert into order_item(order_id, item_id, quantity) values(5, 4, 2);
+insert into order_item(order_id, item_id, quantity) values(5, 1, 2);
+
+
+2.実行結果
+sql_education=# insert into order_item(order_id, item_id, quantity) values(1, 2, 2);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+(1 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(1, 4, 1);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+(2 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(1, 7, 2);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+(3 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(2, 5, 4);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+(4 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(2, 6, 5);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+  5 |        2 |       6 |        5
+(5 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(2, 7, 6);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+  5 |        2 |       6 |        5
+  6 |        2 |       7 |        6
+(6 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(3, 3, 10);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+  5 |        2 |       6 |        5
+  6 |        2 |       7 |        6
+  7 |        3 |       3 |       10
+(7 行)
+
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(3, 7, 5);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+  5 |        2 |       6 |        5
+  6 |        2 |       7 |        6
+  7 |        3 |       3 |       10
+  8 |        3 |       7 |        5
+(8 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(3, 2, 5);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+  5 |        2 |       6 |        5
+  6 |        2 |       7 |        6
+  7 |        3 |       3 |       10
+  8 |        3 |       7 |        5
+  9 |        3 |       2 |        5
+(9 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(4, 3, 10);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+  5 |        2 |       6 |        5
+  6 |        2 |       7 |        6
+  7 |        3 |       3 |       10
+  8 |        3 |       7 |        5
+  9 |        3 |       2 |        5
+ 10 |        4 |       3 |       10
+(10 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(4, 7, 1);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+  5 |        2 |       6 |        5
+  6 |        2 |       7 |        6
+  7 |        3 |       3 |       10
+  8 |        3 |       7 |        5
+  9 |        3 |       2 |        5
+ 10 |        4 |       3 |       10
+ 11 |        4 |       7 |        1
+(11 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(4, 6, 2);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+  5 |        2 |       6 |        5
+  6 |        2 |       7 |        6
+  7 |        3 |       3 |       10
+  8 |        3 |       7 |        5
+  9 |        3 |       2 |        5
+ 10 |        4 |       3 |       10
+ 11 |        4 |       7 |        1
+ 12 |        4 |       6 |        2
+(12 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(5, 8, 5);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+  5 |        2 |       6 |        5
+  6 |        2 |       7 |        6
+  7 |        3 |       3 |       10
+  8 |        3 |       7 |        5
+  9 |        3 |       2 |        5
+ 10 |        4 |       3 |       10
+ 11 |        4 |       7 |        1
+ 12 |        4 |       6 |        2
+ 13 |        5 |       8 |        5
+(13 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(5, 4, 2);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+  5 |        2 |       6 |        5
+  6 |        2 |       7 |        6
+  7 |        3 |       3 |       10
+  8 |        3 |       7 |        5
+  9 |        3 |       2 |        5
+ 10 |        4 |       3 |       10
+ 11 |        4 |       7 |        1
+ 12 |        4 |       6 |        2
+ 13 |        5 |       8 |        5
+ 14 |        5 |       4 |        2
+(14 行)
+
+
+sql_education=# insert into order_item(order_id, item_id, quantity) values(5, 1, 2);
+INSERT 0 1
+sql_education=# select * from order_item;
+ id | order_id | item_id | quantity
+----+----------+---------+----------
+  1 |        1 |       2 |        2
+  2 |        1 |       4 |        1
+  3 |        1 |       7 |        2
+  4 |        2 |       5 |        4
+  5 |        2 |       6 |        5
+  6 |        2 |       7 |        6
+  7 |        3 |       3 |       10
+  8 |        3 |       7 |        5
+  9 |        3 |       2 |        5
+ 10 |        4 |       3 |       10
+ 11 |        4 |       7 |        1
+ 12 |        4 |       6 |        2
+ 13 |        5 |       8 |        5
+ 14 |        5 |       4 |        2
+ 15 |        5 |       1 |        2
+(15 行)
