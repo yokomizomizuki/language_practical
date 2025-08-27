@@ -35,7 +35,7 @@ create table order_status (status_code serial primary key, status_name char vary
 insert into order_status (status_name, description) values('受付済', '注文を受付した状態のステータス'), ('発注済', '注文を受け、メーカーへの発注を済ませたステータス'), ('在庫確保済', 'メーカーから在庫を受取り、店舗に在庫があるステータス'), ('処理済', '顧客へ注文商品を渡し、注文の処理がすべて完了したステータス');
 
 3.注文テーブルに注文ステータスのカラムを追加
-alter table order_info add column order_status int;
+alter table order_info add column order_status int not null default 1;
 
 4.alter table文で注文テーブルに注文ステータスの外部キー追加
 alter table order_info add constraint order_info_order_info_fkey foreign key (order_status) references order_status(status_code);
@@ -55,17 +55,17 @@ sql_education=# select * from order_status;
 
 
 3.
-sql_education=# alter table order_info add column order_status int;
+sql_education=# alter table order_info add column order_status int not null default 1;
 
 sql_education=# select * from order_info;
 
- order_info_id | order_date | account_id | is_canceled | canceled_at | store_id |order_status
----------------+------------+------------+-------------+-------------+----------+-------------
-             2 | 2025-01-20 |          1 | f           |             |          |
-             3 | 2024-12-31 |          2 | f           |             |          |
-             4 | 2025-01-20 |          2 | f           |             |          |
-             5 | 2025-04-01 |          2 | f           |             |          |
-             1 | 2024-12-30 |          1 | t           | 2025-08-26  |          |
+ order_info_id | order_date | account_id | is_canceled | canceled_at | store_id | order_status
+---------------+------------+------------+-------------+-------------+----------+--------------
+             2 | 2025-01-20 |          1 | f           |             |          |            1
+             3 | 2024-12-31 |          2 | f           |             |          |            1
+             4 | 2025-01-20 |          2 | f           |             |          |            1
+             5 | 2025-04-01 |          2 | f           |             |          |            1
+             1 | 2024-12-30 |          1 | t           | 2025-08-26  |          |            1
 (5 行)
 
 4.
@@ -79,7 +79,7 @@ sql_education=*# \d order_info;
  is_canceled   | boolean |          |               | false
  canceled_at   | date    |          |               |
  store_id      | integer |          |               |
- order_status  | integer |          |               |
+ order_status  | integer |          | not null      | 1
 インデックス:
     "order_info_pkey" PRIMARY KEY, btree (order_info_id)
 外部キー制約:

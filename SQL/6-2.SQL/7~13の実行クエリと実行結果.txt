@@ -15,7 +15,7 @@ sql_education=# select item_id as 製品ID, name as 製品名, price as 値段 f
 8.集計関数付き
 (order_info, 2024年にされた注文総数, 2024年の注文数)
 
-sql_education=# select COUNT(*) AS ２０２４年の注文数 from order_info where order_date between '2024-01-01' and '2025-01-01';
+sql_education=# select COUNT(*) AS ２０２４年の注文数 from order_info where order_date between '2024-01-01' and '2024-12-31';
 
  ２０２４年の注文数
 --------------------
